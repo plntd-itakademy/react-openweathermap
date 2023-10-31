@@ -1,0 +1,26 @@
+.card {
+  padding: 12px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 12px;
+  min-height: 200px;
+  text-align: center;
+  transition: 0.2s transform;
+  max-width: 300px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .city {
+    font-size: 22px;
+  }
+
+  .icon {
+    width: 60px;
+  }
+}

@@ -1,0 +1,36 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul {
+  margin: 0;
+}
+
+.app {
+  width: 800px;
+  max-width: 90vw;
+  margin: 50px auto 0 auto;
+  border-radius: 14px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 24px;
+  background-color: white;
+}
+
+.section {
+  &:not(:first-child) {
+    margin-top: 40px;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 55px 30px;
+}
