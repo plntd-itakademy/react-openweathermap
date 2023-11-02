@@ -1,53 +1,25 @@
 import { useEffect, useState } from "react";
+import { useGeolocated } from "react-geolocated";
 import WeatherCard from "../weather-card";
 
 function WeatherPosition({ apiKey }) {
   const [weatherData, setWeatherData] = useState(null);
-  const [position, setPosition] = useState(null);
-  const [positionError, setPositionError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const success = (pos) => {
-      setPosition(pos.coords);
-    };
-
-    const error = (err) => {
-      let error = "";
-
-      switch (err.code) {
-        case 1:
-          error = "Localisation refusée.";
-          break;
-
-        case 2:
-          error = "Localisation indisponible.";
-          break;
-
-        default:
-          error = "Délai d'expération atteint.";
-          break;
-      }
-
-      setPositionError(error);
-    };
-
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
-  }, []);
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+    useGeolocated({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+    });
 
   useEffect(() => {
-    if (!position) return;
+    if (!coords) return;
 
     const urlParams = new URLSearchParams({
       lang: "fr",
-      lat: position.latitude,
-      lon: position.longitude,
+      lat: coords.latitude,
+      lon: coords.longitude,
       appid: apiKey,
       units: "metric",
     });
@@ -60,14 +32,16 @@ function WeatherPosition({ apiKey }) {
         setIsLoading(false);
         setWeatherData(data);
       });
-  }, [apiKey, position]);
+  }, [apiKey, coords]);
 
   return (
     <div className="section">
       <h1>Météo Selon la Position</h1>
 
-      {positionError ? (
-        <p>{positionError}</p>
+      {!isGeolocationAvailable ? (
+        <p>La géolocalisation n'est pas supportée par votre navigateur.</p>
+      ) : !isGeolocationEnabled ? (
+        <p>La géolocalisation n'est pas activée.</p>
       ) : isLoading ? (
         <p>Chargement...</p>
       ) : weatherData ? (
